@@ -1,0 +1,23 @@
+mode_service:
+    resource: "@ModeServiceBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+mode_user:
+    resource: Mode\UserBundle\Controller\UserController
+    type:     rest
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
+
+fos_oauth_server_token:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
+
+
+
+
+
+
+
+

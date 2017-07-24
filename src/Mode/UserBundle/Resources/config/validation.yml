@@ -1,0 +1,58 @@
+# néceaasire pour la validation de form
+Mode\UserBundle\Entity\User:
+    # configuration à router pour les contraintes
+    constraints:
+        # Pour un attribut unique d'une entité
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: telephone
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: email
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: username
+    # configuration à rajouter pour les contraintes sur les attributs
+    properties:
+        prenom:
+            - NotBlank: ~
+            - Type: string
+            - Length:
+                max: 20
+                maxMessage: 'le penom ne doit pas dépasser {{ limit }} caractères'
+        nom:
+            - NotBlank: ~
+            - Type: string
+            - Length:
+                max: 20
+                maxMessage: 'le nom ne doit pas dépasser {{ limit }} caractères'
+        sexe:
+            - NotBlank: ~
+            - Choice:
+                choices: [Homme, Femme]
+        telephone:
+            - Regex:
+                pattern: '/^\d{9}$/'
+                message: le numéro doit être composé de 9 chiffres
+        plainPassword:
+            - NotBlank: ~
+            - Type: string
+            - Length:
+                min: 4
+                max: 250
+                minMessage: 'le mot de passe ne doit pas contenir au moins {{ limit }} caractères'
+                maxMessage: 'le mot de passe ne doit pas dépasser {{ limit }} caractères'
+        roles:
+            - Valid: ~
+
+Mode\UserBundle\Entity\Role:
+    properties:
+        nom:
+            - NotBlank: ~
+            - Choice:
+                choices: [ROLE_PUBLICATEUR, ROLE_ADMIN, ROLE_SUPER_ADMIN]
+
+Mode\UserBundle\Entity\Etat:
+    properties:
+        enabled:
+            - NotBlank: ~
+            - Type:
+                type: integer
+                message: cette valeur doit être 1 or 0
+            - Choice:
+                choices: [0, 1]
+                message: cette valeur doit être 1 or 0

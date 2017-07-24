@@ -1,0 +1,4 @@
+services:
+#    mode_user.example:
+#        class: Mode\UserBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

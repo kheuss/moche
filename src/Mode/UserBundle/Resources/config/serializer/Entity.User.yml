@@ -1,0 +1,28 @@
+Mode\UserBundle\Entity\User:
+    exclusion_policy: NONE
+    properties:
+        id:
+            groups: ['user',  'admin']
+            xml_element:
+                cdata: false
+        prenom:
+            groups: ['user', 'admin']
+            xml_element:
+                cdata: false
+        nom:
+            groups: ['user', 'admin']
+            xml_element:
+                cdata: false
+        telephone:
+            groups: ['user', 'admin']
+            xml_element:
+                cdata: false
+        sexe:
+            groups: ['user', 'admin']
+            xml_element:
+                cdata: false
+        adresse:
+            groups: ['user', 'admin']
+            xml_element:
+                cdata: false
+

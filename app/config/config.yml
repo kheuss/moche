@@ -1,0 +1,128 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: fr
+    jms_serializer.camel_case_naming_strategy.class: JMS\Serializer\Naming\IdenticalPropertyNamingStrategy
+
+framework:
+    #esi: ~
+    translator: { fallbacks: ['%locale%'] }
+    secret: '%secret%'
+    router:
+        resource: '%kernel.project_dir%/app/config/routing.yml'
+        strict_requirements: ~
+    form: ~
+    csrf_protection: ~
+    validation: { enable_annotations: true }
+    #serializer: { enable_annotations: true }
+    serializer:
+        enabled: false
+    templating:
+        engines: ['twig']
+    default_locale: '%locale%'
+    trusted_hosts: ~
+    session:
+        # https://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id: session.handler.native_file
+        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+    fragments: ~
+    http_method_override: true
+    assets: ~
+    php_errors:
+        log: true
+
+# Twig Configuration
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver: pdo_pgsql
+        host: '%database_host%'
+        port: '%database_port%'
+        dbname: '%database_name%'
+        user: '%database_user%'
+        password: '%database_password%'
+        charset: UTF8
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: "%kernel.project_dir%/var/data/data.sqlite"
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #path: '%database_path%'
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: '%mailer_transport%'
+    host: '%mailer_host%'
+    username: '%mailer_user%'
+    password: '%mailer_password%'
+    spool: { type: memory }
+
+
+fos_rest:
+    routing_loader:
+        default_format: json                            # All responses should be JSON formated
+        include_format: false                           # We do not include format in request, so that all responses
+                                                        # will eventually be JSON formated
+    view:
+        #permet a une action de retourner une instance de vue sans passer par viewHandler
+        view_response_listener: true
+        # configuration à rajouter pour déclarer les formats de réponses supportés
+        # En réalité, ces deux formats sont déjà activés par défaut mais par soucis de clarté nous allons les laisser visibles dans le fichier de configuration.
+        formats:
+            json: true
+            xml: true
+    format_listener:
+        rules:
+            - { priorities: ['json', 'xml'], fallback_format: json, prefer_extension: false }
+    serializer:
+            serialize_null:  true
+    exception:
+        enabled: true
+        messages:
+            'Symfony\Component\HttpKernel\Exception\HttpException' : true
+            'Symfony\Component\Security\Core\Exception\BadCredentialsException': true
+        codes:
+            'Symfony\Component\Security\Core\Exception\BadCredentialsException': 401
+
+fos_user:
+    db_driver: orm
+    firewall_name: api                                  # Seems to be used when registering user/reseting password,
+    user_class: Mode\UserBundle\Entity\User
+    from_email:
+        address: "mordioum@app.com"
+        sender_name: "No Reply"
+
+fos_oauth_server:
+    db_driver:           orm
+    client_class:        Mode\UserBundle\Entity\Client
+    access_token_class:  Mode\UserBundle\Entity\AccessToken
+    refresh_token_class: Mode\UserBundle\Entity\RefreshToken
+    auth_code_class:     Mode\UserBundle\Entity\AuthCode
+    service:
+        user_provider: fos_user.user_provider.username             # This property will be used when valid credentials are given to load the user upon access token creation
+
+jms_serializer:
+    handlers:
+        datetime:
+            default_format: "Y-m-d H:i:s"
+            default_timezone: "UTC"
+    metadata:
+        auto_detection: true
+        directories:
+            FOS:
+                namespace_prefix: "FOS\\UserBundle"
+                path: "@ModeUserBundle/Resources/config/serializer/FOS"

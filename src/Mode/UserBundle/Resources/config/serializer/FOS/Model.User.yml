@@ -1,0 +1,25 @@
+FOS\UserBundle\Model\User:
+    exclusion_policy: NONE
+    xml_root_name: user
+    properties:
+        id:
+            groups: ['user',  'admin']
+            xml_element:
+                cdata: false
+        username:
+            groups: ['admin']
+            xml_element:
+                cdata: false
+        email:
+            groups: ['user',  'admin']
+            xml_element:
+                cdata: false
+        enabled:
+            groups: ['admin']
+            xml_element:
+                cdata: false
+        roles:
+            groups: ['admin']
+            xml_element:
+                cdata: false
+        

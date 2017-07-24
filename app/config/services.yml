@@ -1,0 +1,2 @@
+imports:
+    - { resource: "@ModeUserBundle/Resources/config/services.yml" }

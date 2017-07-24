@@ -1,0 +1,9 @@
+imports:
+    - { resource: "@ModeUserBundle/Resources/config/security.yml" }
+security:
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_PUBLICATEUR
+        ROLE_SUPER_ADMIN: [ROLE_PUBLICATEUR, ROLE_ALLOWED_TO_SWITCH]
+    access_control:
+        - { path: ^/rest/secure/client/publicateur, role: ROLE_PUBLICATEUR }
+        - { path: ^/rest/secure/client/admin, role: ROLE_ADMIN }
